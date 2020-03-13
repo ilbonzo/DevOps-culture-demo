@@ -1,5 +1,5 @@
 ---
-- hosts: loadbalancer
+- hosts: loadbalancers
   become: true
 
   roles:

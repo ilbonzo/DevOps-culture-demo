@@ -13,6 +13,12 @@ database_server
 [loadbalancers]
 load_balancer
 
+[production]
+load_balancer
+web_server_1
+web_server_2
+load_balancer
+
 [function:children]
 webservers
 dbservers

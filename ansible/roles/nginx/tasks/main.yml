@@ -6,8 +6,8 @@
     state: present
     line: "{{ item.ip }} {{ item.name }}"
   with_items:
-    - { ip: 172.31.31.38, name: web1 }
-    - { ip: 172.31.23.242, name: web2 }
+    - { ip: 172.31.31.38, name: web_server_1 }
+    - { ip: 172.31.23.242, name: web_server_2 }
   tags:
   - no-docker
 
