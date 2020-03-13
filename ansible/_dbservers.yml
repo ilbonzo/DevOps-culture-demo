@@ -1,0 +1,42 @@
+- hosts: dbservers
+  become: true
+
+  pre_tasks:
+    - name: dbservers
+      debug: msg="Start dbservers playbook"
+
+  vars:
+    postgresql_python_library: python3-psycopg2
+    postgresql_hba_entries:
+      - { type: local, database: all, user: all, auth_method: trust }
+      - { type: host, database: all, user: all, address: '127.0.0.1/32', auth_method: trust }
+      - { type: host, database: all, user: all, address: '::1/128', auth_method: trust }
+    postgresql_databases:
+      - name: ilbonzo
+    postgresql_users:
+      - name: ilbonzo
+        password: secret
+
+  tasks:
+    - name: updates a server
+      apt:
+        update_cache: yes
+    - name: upgrade server
+      apt:
+        upgrade: yes
+        update_cache: yes
+    - name: install packages
+      apt:
+        pkg:
+          - aptitude
+          - zip
+          - unzip
+          - sudo
+        state: present
+        update_cache: yes
+    - include_role:
+        name: geerlingguy.postgresql
+
+  post_tasks:
+    - name: dbservers
+      debug: msg="End dbservers playbook"

@@ -1,0 +1,10 @@
+---
+- hosts: loadbalancer
+  become: true
+
+  roles:
+  - nginx
+
+  handlers:
+    - name: restart nginx
+      service: name=nginx state=restarted

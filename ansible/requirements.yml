@@ -1,0 +1,9 @@
+# from galaxy
+- src: geerlingguy.apache
+
+- src: geerlingguy.postgresql
+
+- src: geerlingguy.php
+
+- src: geerlingguy.composer
+

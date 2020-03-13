@@ -1,0 +1,42 @@
+---
+# tasks file for loadbalancer
+- name: edit /etc/hosts
+  lineinfile:
+    path: /etc/hosts
+    state: present
+    line: "{{ item.ip }} {{ item.name }}"
+  with_items:
+    - { ip: 172.31.31.38, name: web1 }
+    - { ip: 172.31.23.242, name: web2 }
+  tags:
+  - no-docker
+
+- name: install nginx
+  apt:
+    name=nginx
+    state=present
+    update_cache=yes
+
+- name: ensure nginx is started
+  service:
+    name=nginx
+    state=started
+    enabled=yes
+
+- name: config nginx site
+  template:
+    src=templates/nginx.conf.j2
+    dest=/etc/nginx/sites-available/demo
+    mode=0644
+  notify: restart nginx
+
+- name: de-activate default nginx site
+  file: path=/etc/nginx/sites-enabled/default state=absent
+  notify: restart nginx
+
+- name: activate demo nginx site
+  file:
+    src=/etc/nginx/sites-available/demo
+    dest=/etc/nginx/sites-enabled/demo
+    state=link
+  notify: restart nginx

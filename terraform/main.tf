@@ -26,45 +26,45 @@ variable "public_key" {
   type    = string
 }
 
-# resource "aws_instance" "web_server_1" {
-#   ami             = "ami-0b418580298265d5c" # ubuntu 18.04
-#   instance_type   = "t2.micro"
-#   key_name        = "bonzo"
-#   security_groups = ["production_sg"]
-#   tags = {
-#     Name = var.web_server_1_name
-#   }
-# }
+resource "aws_instance" "web_server_1" {
+  ami             = "ami-0b418580298265d5c" # ubuntu 18.04
+  instance_type   = "t2.micro"
+  key_name        = "bonzo"
+  security_groups = ["production_sg"]
+  tags = {
+    Name = var.web_server_1_name
+  }
+}
 
-# resource "aws_instance" "web_server_2" {
-#   ami             = "ami-0b418580298265d5c" # ubuntu 18.04
-#   instance_type   = "t2.micro"
-#   key_name        = "bonzo"
-#   security_groups = ["production_sg"]
-#   tags = {
-#     Name = var.web_server_2_name
-#   }
-# }
+resource "aws_instance" "web_server_2" {
+  ami             = "ami-0b418580298265d5c" # ubuntu 18.04
+  instance_type   = "t2.micro"
+  key_name        = "bonzo"
+  security_groups = ["production_sg"]
+  tags = {
+    Name = var.web_server_2_name
+  }
+}
 
-# resource "aws_instance" "load_balancer" {
-#   ami             = "ami-0b418580298265d5c" # ubuntu 18.04
-#   instance_type   = "t2.micro"
-#   key_name        = "bonzo"
-#   security_groups = ["production_sg"]
-#   tags = {
-#     Name = var.load_balancer_name
-#   }
-# }
+resource "aws_instance" "load_balancer" {
+  ami             = "ami-0b418580298265d5c" # ubuntu 18.04
+  instance_type   = "t2.micro"
+  key_name        = "bonzo"
+  security_groups = ["production_sg"]
+  tags = {
+    Name = var.load_balancer_name
+  }
+}
 
-# resource "aws_instance" "database" {
-#   ami             = "ami-0b418580298265d5c" # ubuntu 18.04
-#   instance_type   = "t2.micro"
-#   key_name        = "bonzo"
-#   security_groups = ["production_sg"]
-#   tags = {
-#     Name = var.database_server_name
-#   }
-# }
+resource "aws_instance" "database" {
+  ami             = "ami-0b418580298265d5c" # ubuntu 18.04
+  instance_type   = "t2.micro"
+  key_name        = "bonzo"
+  security_groups = ["production_sg"]
+  tags = {
+    Name = var.database_server_name
+  }
+}
 
 
 resource "aws_key_pair" "bonzo" {

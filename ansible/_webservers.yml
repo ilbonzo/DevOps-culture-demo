@@ -1,0 +1,47 @@
+- hosts: webservers
+  become: true
+
+  pre_tasks:
+    - name: webservers
+      debug: msg="Start webservers playbook"
+
+  vars:
+    apache_remove_default_vhost: true
+    php_webserver_daemon: "apache2"
+    php_default_version_debian: "7.2"
+    php_packages_extra:
+      - php{{ php_default_version_debian }}-pgsql
+      - php{{ php_default_version_debian }}-zip
+
+  tasks:
+    - name: updates a server
+      apt:
+        update_cache: yes
+    - name: upgrade server
+      apt:
+        upgrade: yes
+        update_cache: yes
+    - name: install packages
+      apt:
+        pkg:
+          - aptitude
+          - zip
+          - unzip
+          - sudo
+          - screen
+        state: present
+        update_cache: yes
+    - name: install libapache2-mod-php
+      package:
+        name: libapache2-mod-php
+        state: present
+    - include_role:
+        name: geerlingguy.apache
+    - include_role:
+        name: geerlingguy.php
+    - include_role:
+        name: geerlingguy.composer
+
+  post_tasks:
+    - name: webservers
+      debug: msg="End webservers playbook"
