@@ -2,6 +2,10 @@
 - hosts: loadbalancers
   become: true
 
+  tasks:
+    - name: Ensure hostname set
+      hostname: name={{ inventory_hostname }}
+
   roles:
     - nginx
 

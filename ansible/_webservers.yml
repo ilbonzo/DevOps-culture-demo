@@ -14,6 +14,8 @@
       - php{{ php_default_version_debian }}-zip
 
   tasks:
+    - name: Ensure hostname set
+      hostname: name={{ inventory_hostname }}
     - name: updates a server
       apt:
         update_cache: yes
