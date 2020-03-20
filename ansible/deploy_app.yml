@@ -1,0 +1,81 @@
+- hosts: webservers
+  become: true
+
+  vars:
+    github_user: ilbonzo
+    apache_user: www-data
+    apache_group: www-data
+
+  vars_prompt:
+    - name: "release_version_to_deploy"
+      prompt: "Release version to deploy"
+      default: "0.1.0"
+      private: no
+    - name: "github_password"
+      prompt: "Github password"
+      default: "secret"
+
+  pre_tasks:
+    - name: deploy_app
+      debug: msg="Start deploy_app playbook"
+
+  tasks:
+    - name: updates a server
+      apt:
+        update_cache: yes
+    - name: install packages
+      apt:
+        pkg:
+          - git
+        state: present
+        update_cache: yes
+    - name: Create a directory versions
+      file:
+        path: "/home/ubuntu/versions/"
+        state: directory
+        mode: "0755"
+        owner: "{{ apache_user }}"
+        group: "{{ apache_group }}"
+    - name: Deploy enabu | clone repository
+      git:
+        # repo: "https://{{ github_user | urlencode }}:{{ github_password }}@github.com/ilbonzo/DevOps-culture-demo.git"
+        repo: "https://github.com/ilbonzo/DevOps-culture-demo.git"
+        dest: "/home/ubuntu/versions/app-{{ release_version_to_deploy }}"
+        version: "tags/{{ release_version_to_deploy }}"
+        recursive: yes
+      ignore_errors: yes
+      become_user: "{{ apache_user }}"
+      tags:
+        - deploy_enabu_git
+    - name: Copy file .env owner and permissions
+      copy:
+        src: ../app/.env
+        dest: "/home/ubuntu/versions/app-{{ release_version_to_deploy }}/app/.env"
+        owner: "{{ apache_user }}"
+        group: "{{ apache_group }}"
+        mode: "0644"
+
+    - name: composer install dependencies
+      composer:
+        command: install
+        working_dir: "/home/ubuntu/versions/app-{{ release_version_to_deploy }}/app"
+    - name: Create current symlink
+      file:
+        src: "/home/ubuntu/versions/app-{{ release_version_to_deploy }}"
+        dest: "/home/ubuntu/versions/current"
+        state: link
+    - name: remove html link or dir
+      file:
+        path: "/var/www/html"
+        state: absent
+    - name: Create symlink html
+      file:
+        src: "/home/ubuntu/versions/current/app/public"
+        dest: "/var/www/html"
+        state: link
+
+
+
+  post_tasks:
+    - name: deploy_app
+      debug: msg="End deploy_app playbook"
