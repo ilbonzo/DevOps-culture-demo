@@ -3,7 +3,7 @@
   become: true
 
   roles:
-  - nginx
+    - nginx
 
   handlers:
     - name: restart nginx

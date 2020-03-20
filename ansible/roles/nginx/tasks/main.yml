@@ -6,10 +6,10 @@
     state: present
     line: "{{ item.ip }} {{ item.name }}"
   with_items:
-    - { ip: 172.31.31.38, name: web_server_1 }
-    - { ip: 172.31.23.242, name: web_server_2 }
+    - { ip: 172.31.25.35, name: web_server_1 }
+    - { ip: 172.31.22.40, name: web_server_2 }
   tags:
-  - no-docker
+    - no-docker
 
 - name: install nginx
   apt:
