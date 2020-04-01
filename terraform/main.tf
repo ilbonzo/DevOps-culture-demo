@@ -22,6 +22,21 @@ variable "database_server_name" {
   default = "database"
 }
 
+variable "database_server_name2" {
+  type    = string
+  default = "database2"
+}
+
+variable "etcd_server_name" {
+  type    = string
+  default = "etcd"
+}
+
+variable "haproxy_server_name" {
+  type    = string
+  default = "haproxy"
+}
+
 variable "public_key" {
   type    = string
 }
@@ -66,6 +81,35 @@ resource "aws_instance" "database" {
   }
 }
 
+resource "aws_instance" "database2" {
+  ami             = "ami-0b418580298265d5c" # ubuntu 18.04
+  instance_type   = "t2.micro"
+  key_name        = "bonzo"
+  security_groups = ["production_sg"]
+  tags = {
+    Name = var.database_server_name2
+  }
+}
+
+resource "aws_instance" "etcd" {
+  ami             = "ami-0b418580298265d5c" # ubuntu 18.04
+  instance_type   = "t2.micro"
+  key_name        = "bonzo"
+  security_groups = ["production_sg"]
+  tags = {
+    Name = var.etcd_server_name
+  }
+}
+
+resource "aws_instance" "haproxy" {
+  ami             = "ami-0b418580298265d5c" # ubuntu 18.04
+  instance_type   = "t2.micro"
+  key_name        = "bonzo"
+  security_groups = ["production_sg"]
+  tags = {
+    Name = var.haproxy_server_name
+  }
+}
 
 resource "aws_key_pair" "bonzo" {
   key_name   = "bonzo"
@@ -91,9 +135,9 @@ resource "aws_security_group" "production" {
   }
 
   ingress {
-    from_port   = 5432
-    to_port     = 5432
-    protocol    = "tcp"
+    from_port   = 0
+    to_port     = 0
+    protocol    = -1
     cidr_blocks = ["172.31.0.0/16"]
   }
 

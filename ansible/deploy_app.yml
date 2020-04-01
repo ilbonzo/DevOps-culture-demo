@@ -59,6 +59,7 @@
       composer:
         command: install
         working_dir: "/home/ubuntu/versions/app-{{ release_version_to_deploy }}/app"
+
     - name: Create current symlink
       file:
         src: "/home/ubuntu/versions/app-{{ release_version_to_deploy }}"
@@ -73,8 +74,6 @@
         src: "/home/ubuntu/versions/current/app/public"
         dest: "/var/www/html"
         state: link
-
-
 
   post_tasks:
     - name: deploy_app
