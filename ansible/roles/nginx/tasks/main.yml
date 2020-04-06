@@ -8,6 +8,7 @@
   with_items:
     - { ip: 172.31.25.35, name: web_server_1 }
     - { ip: 172.31.22.40, name: web_server_2 }
+    - { ip: 172.31.16.228, name: web_server_3 }
   tags:
     - no-docker
 

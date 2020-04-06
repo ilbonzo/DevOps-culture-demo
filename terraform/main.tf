@@ -12,6 +12,11 @@ variable "web_server_2_name" {
   default = "web2"
 }
 
+variable "web_server_3_name" {
+  type    = string
+  default = "web3"
+}
+
 variable "load_balancer_name" {
   type    = string
   default = "load balancer"
@@ -58,6 +63,16 @@ resource "aws_instance" "web_server_2" {
   security_groups = ["production_sg"]
   tags = {
     Name = var.web_server_2_name
+  }
+}
+
+resource "aws_instance" "web_server_3" {
+  ami             = "ami-055f6b0c50c15ed5b" # laravel 0.1.2
+  instance_type   = "t2.micro"
+  key_name        = "bonzo"
+  security_groups = ["production_sg"]
+  tags = {
+    Name = var.web_server_3_name
   }
 }
 
@@ -139,6 +154,13 @@ resource "aws_security_group" "production" {
     to_port     = 0
     protocol    = -1
     cidr_blocks = ["172.31.0.0/16"]
+  }
+
+  ingress {
+    from_port   = 7000
+    to_port     = 7000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
